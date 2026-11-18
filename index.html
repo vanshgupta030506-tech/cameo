@@ -11,7 +11,7 @@ input.wide{width:min(54vw,480px);height:40px}label:has(.wide){font-size:18px}out
 .dot-editor{position:absolute;top:24px;left:6%;z-index:2;color:#ddd;font:13px monospace}
 .dot-editor input{position:static;opacity:1;display:block;width:min(80vw,380px);height:auto;background:#22251f;color:#eee;border:1px solid #555;padding:12px;font:24px Cameo}
 
-:root{--ink:#9b456a;--paper:#f5dfe4}
+:root{--ink:#a55078;--paper:#e8cbd6}
 body{background:var(--paper);color:#573247}
 main{background:radial-gradient(ellipse at 10% 0%,#c8b1d060,transparent 65%),radial-gradient(ellipse at 90% 100%,#edac9d50,transparent 65%)}
 header,footer{border-color:#aa6d8538}
@@ -34,7 +34,7 @@ h2{color:var(--ink)}
 #study{background:var(--paper)!important}
 :focus-visible{outline:2px solid #a65077;outline-offset:4px}
 
-:root{--ui:#341b2b;--ui-surface:#fff5fa;--ui-track:#8c6179}
+:root{--ui:#663548;--ui-surface:#f6e1e2;--ui-track:#b16b8e}
 header small,footer,#hint,#bar,.dot-editor{color:var(--ui)}
 header,footer{border-color:var(--ui-track)}
 #bar button,footer button{color:var(--ui);background:var(--ui-surface);border-color:var(--ui-track)}
@@ -46,10 +46,16 @@ input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;heigh
 input[type=range]::-moz-range-track{height:6px;border-radius:9px;background:var(--ui-track)}
 input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--ui);border:2px solid var(--ui-surface)}
 #bar :focus-visible,.dot-editor :focus-visible,footer :focus-visible{outline-color:var(--ui)}
+
+main{background:linear-gradient(155deg,#bda9c666 0%,#e6bbd244 48%,#f5c4ae88 100%)}
+#game{background:linear-gradient(155deg,#c7b1cc,var(--paper),#efc8bc)}
+header,footer{border-color:#b57c9855}
+.brand{color:var(--ink)}
+#target{background-color:#f7e7e780;color:#713c55}
 </style><main><header><span class="brand">Cameo</span><small>TYPE STUDIO</small></header><section><canvas id="art"></canvas><input id="word" type="text" aria-label="Type your specimen" autocomplete="off" autofocus></section><div id="bar"></div><footer><div><small id="step"></small><div id="hint"></div></div><div><button id="back">Back</button> <button class="primary" id="next"></button></div></footer></main><div id="more" hidden><div id="study"></div><div id="game"><h2>Typing test</h2><p>Copy the passage. Your first keystroke starts the 30-second timer.</p><p id="target"></p><textarea id="answer" aria-label="Copy the passage" placeholder="Begin typing here" spellcheck="false" autocapitalize="off"></textarea><p id="score"></p><button id="restart">Restart</button><button id="sound" aria-pressed="true">Sound on</button></div></div>
 <script>
 const el=id=>document.getElementById(id), canvas=el('art'),ctx=canvas.getContext('2d'),word=el('word'),bar=el('bar');
-let ink='#9b456a',paper='#f5dfe4';
+let ink='#a55078',paper='#e8cbd6';
 let stage=0,spacing=0,hover=null,speed=1,blur=0,depth=.14,mode='Wave',time=0,last=0,paused=matchMedia('(prefers-reduced-motion: reduce)').matches,rec=null;
 const chars=()=>Array.from(new Intl.Segmenter(undefined,{granularity:'grapheme'}).segment(word.value),s=>s.segment);
 function control(tag,label){let wrap=document.createElement('label');wrap.append(label+' ');let item=document.createElement(tag);wrap.append(item);bar.append(wrap);return item}
@@ -62,10 +68,10 @@ if(stage===2){colorControls(bar);range('Speed',.1,3,.1,speed,v=>speed=v);range('
 function record(){if(rec){rec.stop();return}let stream=canvas.captureStream(30);try{let r=new MediaRecorder(stream),parts=[];r.ondataavailable=e=>parts.push(e.data);r.onstop=()=>{let url=URL.createObjectURL(new Blob(parts,{type:r.mimeType})),a=document.createElement('a');a.href=url;a.download='cameo.'+(r.mimeType.includes('mp4')?'mp4':'webm');a.click();setTimeout(()=>URL.revokeObjectURL(url),60000);stream.getTracks().forEach(t=>t.stop());rec=null;ui()};r.start();rec=r;paused=false;ui()}catch(e){stream.getTracks().forEach(t=>t.stop());el('hint').textContent='This browser could not start recording.'}}
 word.oninput=()=>{el('next').disabled=!word.value.trim()};el('next').onclick=()=>{stage++;ui()};el('back').onclick=()=>{stage--;ui()};
 function draw(now){let w=canvas.clientWidth,h=canvas.clientHeight,d=devicePixelRatio;if(canvas.width!==Math.round(w*d)||canvas.height!==Math.round(h*d)){canvas.width=Math.round(w*d);canvas.height=Math.round(h*d)}ctx.setTransform(d,0,0,d,0,0);ctx.fillStyle=paper;ctx.fillRect(0,0,w,h);
-let wash=ctx.createLinearGradient(0,0,w,h);wash.addColorStop(0,'#c4acd330');wash.addColorStop(.55,'#ffffff00');wash.addColorStop(1,'#edb39c30');ctx.fillStyle=wash;ctx.fillRect(0,0,w,h);if(!paused&&stage===2)time+=Math.min((now-last)/1000,.1)*speed*3;last=now;
+let wash=ctx.createLinearGradient(0,0,w,h);wash.addColorStop(0,'#ac94bf70');wash.addColorStop(.5,'#e9b9d02a');wash.addColorStop(1,'#f5c4ae90');ctx.fillStyle=wash;ctx.fillRect(0,0,w,h);if(!paused&&stage===2)time+=Math.min((now-last)/1000,.1)*speed*3;last=now;
 let a=word.value?chars():Array.from('Type here'),margin=w<500?52:85;ctx.font='100px Cameo';let advances=a.map((c,i)=>ctx.measureText(c).width/100+(i<a.length-1?spacing:0)),units=advances.reduce((s,n)=>s+n,0),size=Math.min(stage===1?335:235,h*(stage===1?.65:.49),(w-2*margin)/Math.max(.6,units)),x=(w-units*size)/2,y=h/2+.3*size;
-if(stage<2){ctx.font=(w<500?'8':'10')+'px monospace';for(let [name,n] of [['ASC',.75],['CAP',.7],['X',.5],['BASE',0],['DESC',-.25]]){let yy=y-n*size;ctx.fillStyle='#777a70';ctx.fillText(name,0,yy+(name==='ASC'?-2:name==='CAP'?8:3));ctx.strokeStyle=n===0?'#9a9d90':'#d1cec1';ctx.beginPath();ctx.moveTo(margin*.72,yy);ctx.lineTo(w,yy);ctx.stroke()}}
-ctx.font=size+'px Cameo';a.forEach((c,i)=>{let phase=time-i*.6,k=stage===2?Math.sin(phase)*depth:0;ctx.save();let lift=stage===2&&hover!==null?Math.exp(-(((x+advances[i]*size/2-hover)/(size*.9))**2))*.23:0;ctx.translate(x,y+size*(k-lift));ctx.filter=stage===2?'blur('+blur*Math.abs(Math.sin(phase))+'px)':'none';ctx.fillStyle=!word.value?'#84887a':ink;ctx.fillText(c,0,0);ctx.restore();x+=advances[i]*size});if(!stage&&document.activeElement===word&&now%1100<600){ctx.fillStyle='#536742';ctx.fillRect(word.value?x+2:(w-units*size)/2-4,y-.7*size,2,size*.75)}requestAnimationFrame(draw)}
+if(stage<2){ctx.font=(w<500?'8':'10')+'px monospace';for(let [name,n] of [['ASC',.75],['CAP',.7],['X',.5],['BASE',0],['DESC',-.25]]){let yy=y-n*size;ctx.fillStyle='#965c79';ctx.fillText(name,0,yy+(name==='ASC'?-2:name==='CAP'?8:3));ctx.strokeStyle=n===0?'#b989a0':'#cbaabb';ctx.beginPath();ctx.moveTo(margin*.72,yy);ctx.lineTo(w,yy);ctx.stroke()}}
+ctx.font=size+'px Cameo';a.forEach((c,i)=>{let phase=time-i*.6,k=stage===2?Math.sin(phase)*depth:0;ctx.save();let lift=stage===2&&hover!==null?Math.exp(-(((x+advances[i]*size/2-hover)/(size*.9))**2))*.23:0;ctx.translate(x,y+size*(k-lift));ctx.filter=stage===2?'blur('+blur*Math.abs(Math.sin(phase))+'px)':'none';ctx.fillStyle=!word.value?'#b76c90':ink;ctx.fillText(c,0,0);ctx.restore();x+=advances[i]*size});if(!stage&&document.activeElement===word&&now%1100<600){ctx.fillStyle='#aa537b';ctx.fillRect(word.value?x+2:(w-units*size)/2-4,y-.7*size,2,size*.75)}requestAnimationFrame(draw)}
 canvas.onpointermove=e=>hover=e.clientX-canvas.getBoundingClientRect().left;canvas.onpointerleave=()=>hover=null;
 function updateControlContrast(){
  const channels=paper.slice(1).match(/../g).map(value=>{
@@ -75,9 +81,9 @@ function updateControlContrast(){
  const luminance=channels[0]*.2126+channels[1]*.7152+channels[2]*.0722;
  const dark=luminance<.3;
  const root=document.documentElement;
- root.style.setProperty('--ui',dark?'#fff5fa':'#341b2b');
- root.style.setProperty('--ui-surface',dark?'#341b2b':'#fff5fa');
- root.style.setProperty('--ui-track',dark?'#b393a5':'#8c6179');
+ root.style.setProperty('--ui',dark?'#f6e1e2':'#663548');
+ root.style.setProperty('--ui-surface',dark?'#663548':'#f6e1e2');
+ root.style.setProperty('--ui-track',dark?'#b393a5':'#b16b8e');
 }
 function colorControls(parent){
  for(const [label,value] of [['Type color',ink],['Background',paper]]){
