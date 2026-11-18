@@ -10,9 +10,46 @@ input.wide{width:min(54vw,480px);height:40px}label:has(.wide){font-size:18px}out
 #game textarea{height:55px}
 .dot-editor{position:absolute;top:24px;left:6%;z-index:2;color:#ddd;font:13px monospace}
 .dot-editor input{position:static;opacity:1;display:block;width:min(80vw,380px);height:auto;background:#22251f;color:#eee;border:1px solid #555;padding:12px;font:24px Cameo}
+
+:root{--ink:#9b456a;--paper:#f5dfe4}
+body{background:var(--paper);color:#573247}
+main{background:radial-gradient(ellipse at 10% 0%,#c8b1d060,transparent 65%),radial-gradient(ellipse at 90% 100%,#edac9d50,transparent 65%)}
+header,footer{border-color:#aa6d8538}
+.brand{font-size:48px;color:var(--ink)}
+small,#step,label{font-family:Georgia,serif;letter-spacing:.04em}
+#hint{color:#795168}
+button,select{border-color:#ac789466;background:#fff4f33b}
+button:hover{background:#e9b9cd55}
+button.primary{background:#8c3d60;color:#fff2f4;border-color:#8c3d60}
+input[type=range]{accent-color:#a65077}
+input[type=color]{position:static;opacity:1;width:32px;height:32px;padding:2px;border:1px solid #b47d98;border-radius:50%;cursor:pointer;background:transparent}
+#game{background:linear-gradient(140deg,#eadbe9,var(--paper),#f4d4c7);border-top:1px solid #b8819840}
+h2{color:var(--ink)}
+#target{background-color:#fff7f8bd;color:#61394f;box-shadow:0 12px 60px #9f5d7910}
+#game textarea{background:#fff6f780;border-color:#bd91a5;border-radius:12px;color:#61394f}
+#target .current{border-bottom-color:#ae5080}
+.dot-editor{color:#62364f;flex-wrap:wrap;gap:12px;right:6%;font-family:Georgia,serif}
+.dot-editor input[type=text]{background:#fff3f55e;border:1px solid #bc8b9f;border-radius:12px;color:#63334e}
+.dot-editor label{font-size:12px}
+#study{background:var(--paper)!important}
+:focus-visible{outline:2px solid #a65077;outline-offset:4px}
+
+:root{--ui:#341b2b;--ui-surface:#fff5fa;--ui-track:#8c6179}
+header small,footer,#hint,#bar,.dot-editor{color:var(--ui)}
+header,footer{border-color:var(--ui-track)}
+#bar button,footer button{color:var(--ui);background:var(--ui-surface);border-color:var(--ui-track)}
+.dot-editor input[type=text]{color:var(--ui);background:var(--ui-surface);border-color:var(--ui-track)}
+input[type=color]{border-color:var(--ui);background:var(--ui-surface)}
+input[type=range]{appearance:none;-webkit-appearance:none;background:transparent;accent-color:var(--ui);height:28px}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:9px;background:var(--ui-track)}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:20px;height:20px;margin-top:-7px;border-radius:50%;background:var(--ui);border:2px solid var(--ui-surface)}
+input[type=range]::-moz-range-track{height:6px;border-radius:9px;background:var(--ui-track)}
+input[type=range]::-moz-range-thumb{width:18px;height:18px;border-radius:50%;background:var(--ui);border:2px solid var(--ui-surface)}
+#bar :focus-visible,.dot-editor :focus-visible,footer :focus-visible{outline-color:var(--ui)}
 </style><main><header><span class="brand">Cameo</span><small>TYPE STUDIO</small></header><section><canvas id="art"></canvas><input id="word" type="text" aria-label="Type your specimen" autocomplete="off" autofocus></section><div id="bar"></div><footer><div><small id="step"></small><div id="hint"></div></div><div><button id="back">Back</button> <button class="primary" id="next"></button></div></footer></main><div id="more" hidden><div id="study"></div><div id="game"><h2>Typing test</h2><p>Copy the passage. Your first keystroke starts the 30-second timer.</p><p id="target"></p><textarea id="answer" aria-label="Copy the passage" placeholder="Begin typing here" spellcheck="false" autocapitalize="off"></textarea><p id="score"></p><button id="restart">Restart</button><button id="sound" aria-pressed="true">Sound on</button></div></div>
 <script>
 const el=id=>document.getElementById(id), canvas=el('art'),ctx=canvas.getContext('2d'),word=el('word'),bar=el('bar');
+let ink='#9b456a',paper='#f5dfe4';
 let stage=0,spacing=0,hover=null,speed=1,blur=0,depth=.14,mode='Wave',time=0,last=0,paused=matchMedia('(prefers-reduced-motion: reduce)').matches,rec=null;
 const chars=()=>Array.from(new Intl.Segmenter(undefined,{granularity:'grapheme'}).segment(word.value),s=>s.segment);
 function control(tag,label){let wrap=document.createElement('label');wrap.append(label+' ');let item=document.createElement(tag);wrap.append(item);bar.append(wrap);return item}
@@ -21,15 +58,37 @@ function options(label,list,value,change){let s=control('select',label);list.for
 function button(title,fn){let b=document.createElement('button');b.textContent=title;b.onclick=fn;bar.append(b);return b}
 function ui(){bar.replaceChildren();let a=chars();el('more').hidden=stage!==2;if(stage===2)dotInput.value=word.value;word.hidden=stage!==0;el('step').textContent=['01 / TYPE','02 / SPACE','03 / MOTION'][stage];el('hint').textContent=['Type your own specimen',a.length>1?'Adjust the spacing across your specimen':'One glyph is ready for motion','Hover to lift the letters · Scroll to explore'][stage];el('back').hidden=!stage;el('back').disabled=!!rec;el('next').hidden=stage===2;el('next').disabled=!word.value.trim();el('next').textContent=stage?'Animate →':'Adjust spacing →';
 if(!stage)word.focus();if(stage===1&&a.length>1){let slider=range('Letter spacing',-.12,.65,.005,spacing,v=>{spacing=v;readout.textContent=Math.round(v*1000)+' / 1000 em'});slider.className='wide';let readout=document.createElement('output');readout.textContent=Math.round(spacing*1000)+' / 1000 em';bar.append(readout)}
-if(stage===2){range('Speed',.1,3,.1,speed,v=>speed=v);range('Blur',0,12,.5,blur,v=>blur=v);range('Depth',0,.45,.01,depth,v=>depth=v);button(paused?'Play':'Pause',()=>{paused=!paused;ui()});let b=button(rec?'Stop & save':'Record',record);b.disabled=!window.MediaRecorder||!canvas.captureStream;if(b.disabled)b.title='Recording unavailable in this browser'}}
+if(stage===2){colorControls(bar);range('Speed',.1,3,.1,speed,v=>speed=v);range('Blur',0,12,.5,blur,v=>blur=v);range('Depth',0,.45,.01,depth,v=>depth=v);button(paused?'Play':'Pause',()=>{paused=!paused;ui()});let b=button(rec?'Stop & save':'Record',record);b.disabled=!window.MediaRecorder||!canvas.captureStream;if(b.disabled)b.title='Recording unavailable in this browser'}}
 function record(){if(rec){rec.stop();return}let stream=canvas.captureStream(30);try{let r=new MediaRecorder(stream),parts=[];r.ondataavailable=e=>parts.push(e.data);r.onstop=()=>{let url=URL.createObjectURL(new Blob(parts,{type:r.mimeType})),a=document.createElement('a');a.href=url;a.download='cameo.'+(r.mimeType.includes('mp4')?'mp4':'webm');a.click();setTimeout(()=>URL.revokeObjectURL(url),60000);stream.getTracks().forEach(t=>t.stop());rec=null;ui()};r.start();rec=r;paused=false;ui()}catch(e){stream.getTracks().forEach(t=>t.stop());el('hint').textContent='This browser could not start recording.'}}
 word.oninput=()=>{el('next').disabled=!word.value.trim()};el('next').onclick=()=>{stage++;ui()};el('back').onclick=()=>{stage--;ui()};
-function draw(now){let w=canvas.clientWidth,h=canvas.clientHeight,d=devicePixelRatio;if(canvas.width!==Math.round(w*d)||canvas.height!==Math.round(h*d)){canvas.width=Math.round(w*d);canvas.height=Math.round(h*d)}ctx.setTransform(d,0,0,d,0,0);ctx.fillStyle='#f5f1e8';ctx.fillRect(0,0,w,h);if(!paused&&stage===2)time+=Math.min((now-last)/1000,.1)*speed*3;last=now;
+function draw(now){let w=canvas.clientWidth,h=canvas.clientHeight,d=devicePixelRatio;if(canvas.width!==Math.round(w*d)||canvas.height!==Math.round(h*d)){canvas.width=Math.round(w*d);canvas.height=Math.round(h*d)}ctx.setTransform(d,0,0,d,0,0);ctx.fillStyle=paper;ctx.fillRect(0,0,w,h);
+let wash=ctx.createLinearGradient(0,0,w,h);wash.addColorStop(0,'#c4acd330');wash.addColorStop(.55,'#ffffff00');wash.addColorStop(1,'#edb39c30');ctx.fillStyle=wash;ctx.fillRect(0,0,w,h);if(!paused&&stage===2)time+=Math.min((now-last)/1000,.1)*speed*3;last=now;
 let a=word.value?chars():Array.from('Type here'),margin=w<500?52:85;ctx.font='100px Cameo';let advances=a.map((c,i)=>ctx.measureText(c).width/100+(i<a.length-1?spacing:0)),units=advances.reduce((s,n)=>s+n,0),size=Math.min(stage===1?335:235,h*(stage===1?.65:.49),(w-2*margin)/Math.max(.6,units)),x=(w-units*size)/2,y=h/2+.3*size;
 if(stage<2){ctx.font=(w<500?'8':'10')+'px monospace';for(let [name,n] of [['ASC',.75],['CAP',.7],['X',.5],['BASE',0],['DESC',-.25]]){let yy=y-n*size;ctx.fillStyle='#777a70';ctx.fillText(name,0,yy+(name==='ASC'?-2:name==='CAP'?8:3));ctx.strokeStyle=n===0?'#9a9d90':'#d1cec1';ctx.beginPath();ctx.moveTo(margin*.72,yy);ctx.lineTo(w,yy);ctx.stroke()}}
-ctx.font=size+'px Cameo';a.forEach((c,i)=>{let phase=time-i*.6,k=stage===2?Math.sin(phase)*depth:0;ctx.save();let lift=stage===2&&hover!==null?Math.exp(-(((x+advances[i]*size/2-hover)/(size*.9))**2))*.23:0;ctx.translate(x,y+size*(k-lift));ctx.filter=stage===2?'blur('+blur*Math.abs(Math.sin(phase))+'px)':'none';ctx.fillStyle=!word.value?'#84887a':'#272822';ctx.fillText(c,0,0);ctx.restore();x+=advances[i]*size});if(!stage&&document.activeElement===word&&now%1100<600){ctx.fillStyle='#536742';ctx.fillRect(word.value?x+2:(w-units*size)/2-4,y-.7*size,2,size*.75)}requestAnimationFrame(draw)}
+ctx.font=size+'px Cameo';a.forEach((c,i)=>{let phase=time-i*.6,k=stage===2?Math.sin(phase)*depth:0;ctx.save();let lift=stage===2&&hover!==null?Math.exp(-(((x+advances[i]*size/2-hover)/(size*.9))**2))*.23:0;ctx.translate(x,y+size*(k-lift));ctx.filter=stage===2?'blur('+blur*Math.abs(Math.sin(phase))+'px)':'none';ctx.fillStyle=!word.value?'#84887a':ink;ctx.fillText(c,0,0);ctx.restore();x+=advances[i]*size});if(!stage&&document.activeElement===word&&now%1100<600){ctx.fillStyle='#536742';ctx.fillRect(word.value?x+2:(w-units*size)/2-4,y-.7*size,2,size*.75)}requestAnimationFrame(draw)}
 canvas.onpointermove=e=>hover=e.clientX-canvas.getBoundingClientRect().left;canvas.onpointerleave=()=>hover=null;
-ui();document.fonts.load('100px Cameo').then(()=>requestAnimationFrame(draw))
+function updateControlContrast(){
+ const channels=paper.slice(1).match(/../g).map(value=>{
+ const channel=parseInt(value,16)/255;
+ return channel<=.04045?channel/12.92:((channel+.055)/1.055)**2.4;
+ });
+ const luminance=channels[0]*.2126+channels[1]*.7152+channels[2]*.0722;
+ const dark=luminance<.3;
+ const root=document.documentElement;
+ root.style.setProperty('--ui',dark?'#fff5fa':'#341b2b');
+ root.style.setProperty('--ui-surface',dark?'#341b2b':'#fff5fa');
+ root.style.setProperty('--ui-track',dark?'#b393a5':'#8c6179');
+}
+function colorControls(parent){
+ for(const [label,value] of [['Type color',ink],['Background',paper]]){
+ const wrap=document.createElement('label'),input=document.createElement('input');
+ wrap.textContent=label;input.type='color';input.value=value;input.setAttribute('aria-label',label);
+ input.oninput=()=>{if(label==='Type color')ink=input.value;else paper=input.value;
+ document.documentElement.style.setProperty('--ink',ink);document.documentElement.style.setProperty('--paper',paper);updateControlContrast();
+ document.querySelectorAll('input[type=color]').forEach(picker=>picker.value=picker.getAttribute('aria-label')==='Type color'?ink:paper)};
+ wrap.append(input);parent.append(wrap)}
+}
+updateControlContrast();ui();document.fonts.load('100px Cameo').then(()=>requestAnimationFrame(draw))
 const passage='Letters leave an impression long after the ink has dried. A quiet rhythm builds as each key meets the page. Between the shapes there is space to breathe.';
 const answer=el('answer');
 let start=null,timer,done=false,soundOn=true,audioEngine,attempts=0,errors=0;
@@ -71,13 +130,13 @@ const dotStage=document.createElement('div');
 dotStage.style.cssText='position:sticky;top:0;height:100svh';
 study.append(dotStage);dotStage.append(dots);
 const editLabel=document.createElement('label');editLabel.className='dot-editor';editLabel.textContent='Edit text · Move your cursor through the dots';
-const dotInput=document.createElement('input');dotInput.type='text';dotInput.setAttribute('aria-label','Edit dotted text');editLabel.append(dotInput);dotStage.append(editLabel);
+const dotInput=document.createElement('input');dotInput.type='text';dotInput.setAttribute('aria-label','Edit dotted text');editLabel.append(dotInput);dotStage.append(editLabel);colorControls(editLabel);
 dotInput.oninput=()=>{word.value=dotInput.value;signature=''};
 dotInput.onfocus=()=>dotInput.value=word.value;
 let pointer=null;
 dots.onpointermove=e=>{const r=dots.getBoundingClientRect();pointer={x:e.clientX-r.left,y:e.clientY-r.top}};
 dots.onpointerleave=()=>pointer=null;
-study.style.cssText='height:175svh;background:#11120f';
+study.style.cssText='height:175svh;background:var(--paper)';
 dots.style.cssText='position:sticky;top:0;display:block;width:100%;height:100svh';
 dots.setAttribute('aria-label','Your Cameo text drawn with a moving band of expanding dots');
 const dc=dots.getContext('2d'),mask=document.createElement('canvas'),mc=mask.getContext('2d',{willReadFrequently:true});
@@ -97,7 +156,7 @@ function dotFrame(ms){
  for(let y=0;y<h;y+=pitch)for(let x=0;x<w;x+=pitch)if(pixels[(y*w+x)*4+3]>100)points.push({homeX:x,homeY:y,x,y,vx:0,vy:0})
  }
  let progress=Math.max(0,Math.min(1,-bounds.top/(bounds.height-h))),phase=progress*6+(paused?0:ms*.00075);
- dc.clearRect(0,0,w,h);dc.fillStyle='#c8c9c0';dc.beginPath();
+ dc.clearRect(0,0,w,h);dc.fillStyle=ink;dc.beginPath();
  for(const point of points){
  let dx=pointer?point.x-pointer.x:0,dy=pointer?point.y-pointer.y:0;
  let distance=Math.hypot(dx,dy),radius=110;
