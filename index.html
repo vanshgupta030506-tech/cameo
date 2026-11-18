@@ -444,7 +444,7 @@ function updateEnvelope(){
  line.setAttribute('aria-hidden',index>active?'true':'false');
  });
  const current=lines[active],chat=envelopeScene.querySelector('.scroll-chat');
- if(current)chat.style.transform='translateY('+(-Math.max(0,current.offsetTop+current.offsetHeight-chat.parentElement.clientHeight*.85))+'px)';
+ if(current)chat.style.transform='translateY('+(-Math.max(0,current.offsetTop+current.offsetHeight-chat.parentElement.clientHeight*.60))+'px)';
 
  envelopeScene.style.setProperty('--flap-angle',(-Math.min(1,progress/.35)*180)+'deg');
  envelopeScene.style.setProperty('--flap-layer',progress>.2?'1':'4');
@@ -486,7 +486,7 @@ function scheduleMusic(){
  oscillator.type='sine';oscillator.frequency.value=frequency;
  const onset=now+index*.3;
  envelope.gain.setValueAtTime(0,onset);
- envelope.gain.linearRampToValueAtTime(.045,onset+2.5);
+ envelope.gain.linearRampToValueAtTime(.16,onset+2.5);
  envelope.gain.exponentialRampToValueAtTime(.0001,onset+11);
  oscillator.connect(envelope).connect(musicGain);oscillator.start(onset);oscillator.stop(onset+12);
  oscillator.onended=()=>{oscillator.disconnect();envelope.disconnect()};
