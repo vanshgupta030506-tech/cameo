@@ -152,27 +152,179 @@ footer button.primary{padding:12px 16px}
 .dot-editor label{margin-left:0}
 #game{padding:60px 22px}
 }
-</style><main><header><span class="brand">Cameo</span><div class="masthead-note">An exploration of<br><em>the unfinished beauty.</em></div></header><section><canvas id="art"></canvas><input id="word" type="text" aria-label="Type your specimen" autocomplete="off" autofocus></section><div id="bar"></div><footer><div><small id="step"></small><div id="hint"></div></div><div><button id="back">Back</button> <button class="primary" id="next"></button></div></footer></main><div id="more" hidden><div id="study"></div><div id="game"><h2>Typing test</h2><p>Copy the passage. Your first keystroke starts the 30-second timer.</p><p id="target"></p><textarea id="answer" aria-label="Copy the passage" placeholder="Begin typing here" spellcheck="false" autocapitalize="off"></textarea><p id="score"></p><button id="restart">Restart</button><button id="sound" aria-pressed="true">Sound on</button></div></div>
-<script>
+
+/* Frosted Cameo studio */
+main{position:relative;isolation:isolate;padding:24px 4vw;min-height:700px;overflow:hidden}
+header{align-items:center;min-height:54px}
+.brand{font-size:48px;letter-spacing:-.025em;line-height:1}
+.masthead-note{padding:0;font-size:13px;line-height:1.5}
+main section{border:1px solid #ffffff50;border-radius:24px;overflow:hidden;margin:24px 0 20px;box-shadow:inset 0 1px 0 #ffffff66,0 20px 70px #713c5509}
+#bar{position:relative;z-index:2;padding:18px 24px;gap:22px;border:1px solid #ffffff70;border-radius:22px;background:color-mix(in srgb,var(--paper) 68%,transparent);backdrop-filter:blur(24px) saturate(125%);-webkit-backdrop-filter:blur(24px) saturate(125%);box-shadow:inset 0 1px 0 #ffffff80,0 12px 35px #63354b12}
+#bar label{font-size:10px;text-transform:none;letter-spacing:.025em}
+#bar button,button,select{border-radius:24px}
+#bar button{background:color-mix(in srgb,var(--ui-surface) 50%,transparent);border-color:color-mix(in srgb,var(--ui-track) 25%,transparent)}
+footer{padding-top:18px}
+footer button.primary{border-radius:28px;box-shadow:0 6px 20px #713c5520}
+.dot-editor{top:22px;left:4vw;right:4vw;width:auto;padding:16px 24px;border-radius:22px;border:1px solid #ffffff70;background:color-mix(in srgb,var(--paper) 72%,transparent);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);box-shadow:0 12px 35px #63354b12}
+.dot-editor input[type=text]{font-size:27px}
+#game{position:relative;overflow:hidden}
+#game h2{font-size:clamp(58px,7vw,96px)}
+#target{background-color:#fff4f34a;border:1px solid #ffffff80;border-radius:22px;padding:24px;backdrop-filter:blur(16px);box-shadow:0 16px 50px #713c5508}
+#game textarea{border:1px solid #ffffff80;border-radius:14px;padding:16px 20px;background:#fff4f34a}
+#game button{border-radius:24px}
+.botanical{position:absolute;pointer-events:none;width:260px;height:260px;right:-110px;top:40px;color:var(--ink);opacity:.16;z-index:-1;transform:rotate(-22deg)}
+.botanical i{position:absolute;left:105px;top:20px;width:55px;height:115px;border:1px solid currentColor;border-radius:70% 70% 45% 45%;transform-origin:50% 110px;background:linear-gradient(180deg,currentColor,transparent);opacity:.45}
+.botanical i:nth-child(2){transform:rotate(45deg)}.botanical i:nth-child(3){transform:rotate(90deg)}.botanical i:nth-child(4){transform:rotate(135deg)}.botanical i:nth-child(5){transform:rotate(180deg)}.botanical i:nth-child(6){transform:rotate(225deg)}.botanical i:nth-child(7){transform:rotate(270deg)}.botanical i:nth-child(8){transform:rotate(315deg)}
+#game .botanical{z-index:0;top:30px;right:-65px;width:260px;opacity:.2}
+@media(max-width:700px){
+main{padding:20px;min-height:760px}
+.brand{font-size:38px}
+.masthead-note{font-size:11px}
+main section{margin-top:20px;border-radius:18px}
+#bar{padding:14px 16px;gap:12px 16px;border-radius:18px}
+#bar label{font-size:10px}
+.dot-editor{left:20px;right:20px;padding:14px 16px;border-radius:18px}
+#target{padding:18px 12px;border-radius:18px}
+}
+
+#bar{flex-wrap:wrap;gap:16px 22px}
+#bar button{margin-left:0}
+#bar button:first-child{background:var(--ui);color:var(--ui-surface);border-color:transparent}
+#bar label:has(input[type=range]){max-width:145px}
+main section{box-shadow:inset 0 1px 0 #ffffff99,0 24px 80px #713c5510}
+#bar button:hover{box-shadow:0 4px 16px #63354b18}
+@media(max-width:700px){main{height:auto;min-height:100svh}main section{flex:none;height:48svh}#bar{gap:12px}}
+
+main section{outline:1px solid #ffffff45;outline-offset:7px}
+main section::after{content:"";position:absolute;inset:18px;pointer-events:none;border:1px solid color-mix(in srgb,var(--ink) 12%,transparent);border-radius:16px;background-image:linear-gradient(color-mix(in srgb,var(--ink) 5%,transparent) 1px,transparent 1px),linear-gradient(90deg,color-mix(in srgb,var(--ink) 5%,transparent) 1px,transparent 1px);background-size:64px 64px}
+#bar{outline:1px solid #ffffff35;outline-offset:5px}
+#love-letter{position:relative;margin:40px auto 100px;padding:clamp(28px,6vw,88px);max-width:1000px;width:calc(100% - 48px);border:1px solid #ffffffa0;border-radius:24px;outline:1px solid #b57c9830;outline-offset:10px;background:linear-gradient(140deg,#fff5f370,#ead5df50);box-shadow:0 25px 80px #713c5510;color:#713c55}
+.letter-heading{display:flex;justify-content:space-between;gap:20px;font:11px Arial,sans-serif;letter-spacing:.06em;border-bottom:1px solid #b57c9840;padding-bottom:22px;margin-bottom:32px}
+#love-letter h2{font:clamp(38px,5vw,64px)/1.15 Cameo,serif;margin-bottom:32px}
+#love-letter p{font:clamp(22px,2.5vw,30px)/1.65 Cameo,serif;margin:0 0 24px}
+.letter-signature{font:28px Cameo,serif;margin-top:40px}
+
+#envelope-scroll{height:240svh;position:relative;margin:0;min-height:0;border:0;outline:0;overflow:visible;box-shadow:none}
+.envelope-stage{position:sticky;top:0;height:100svh;display:flex;align-items:center;justify-content:center;perspective:1400px;overflow:hidden}
+.envelope-hint{position:absolute;top:6vh;text-align:center;font:20px Cameo;color:#713c55;opacity:var(--hint-opacity,1)}
+.envelope{position:relative;width:min(88vw,1120px);aspect-ratio:1.78;transform:translateY(12vh);isolation:isolate}
+.envelope-paper{position:absolute;inset:0;z-index:2;transform:translateY(var(--letter-lift,0%));opacity:var(--letter-opacity,0);box-shadow:0 18px 55px #66354820;border-radius:8px;overflow:hidden}
+.envelope-paper img{display:block;width:100%;height:auto}
+.envelope-pocket{position:absolute;inset:0;z-index:3;clip-path:polygon(0 0,50% 50%,100% 0,100% 100%,0 100%);background:linear-gradient(145deg,#f2dce0,#d9b8c6);filter:drop-shadow(0 -2px 1px #fff);opacity:var(--pocket-opacity,1)}
+.envelope-flap{position:absolute;inset:0;z-index:var(--flap-layer,4);clip-path:polygon(0 0,100% 0,50% 58%);background:linear-gradient(170deg,#f9e9e7,#d5b0c1);transform-origin:top;transform:rotateX(var(--flap-angle,0deg));backface-visibility:hidden}
+.wax-seal{position:absolute;top:27%;left:44%;width:12%;aspect-ratio:1;border-radius:50%;background-image:radial-gradient(circle at 35% 30%,#c78799,#843b56);background-size:1100% auto;background-position:50% 2.4%;box-shadow:0 5px 12px #66354860}
+@media(max-width:700px){.envelope{width:96vw}.envelope-hint{font-size:17px}}
+
+#envelope-scroll{height:850svh}
+.envelope{height:74svh;aspect-ratio:auto;max-width:1000px;transform:translateY(8vh)}
+.envelope-paper{background:linear-gradient(145deg,#f8e9e9ef,#eacbd8ef);border:1px solid #fff9;overflow:hidden;padding:36px;box-shadow:0 22px 80px #66354818}
+.scroll-chat{display:flex;flex-direction:column;gap:28px;transition:transform .65s cubic-bezier(.2,.7,.2,1);will-change:transform;padding-bottom:50px}
+.chat-line{width:85%;opacity:0;transform:translateY(50px) scale(.97);transition:opacity .6s,transform .7s;flex-shrink:0}
+.chat-line.revealed{opacity:1;transform:translateY(0) scale(1)}
+.chat-line p{font:clamp(25px,3.2vw,45px)/1.32 Cameo,serif;margin:0;padding:24px 30px;background:#fff7f3c0;border:1px solid #ffffffbd;border-radius:24px 24px 24px 5px;color:#713c55;box-shadow:0 6px 20px #713c5509}
+.chat-line.reply{align-self:flex-end}
+.chat-line.reply p{background:#e8bfcfc0;border-radius:24px 24px 5px 24px}
+.wax-seal::after{content:"C";font:clamp(22px,4vw,58px) Cameo;position:absolute;inset:0;display:grid;place-items:center;color:#edc6d1}
+main section,#love-letter{--pointer-x:50%;--pointer-y:50%;background-image:radial-gradient(circle at var(--pointer-x) var(--pointer-y),#ffffff30,transparent 45%);transition:box-shadow .3s}
+#love-letter:hover{box-shadow:0 25px 80px #713c5520}
+@media(max-width:700px){.envelope-paper{padding:18px}.chat-line{width:94%}.chat-line p{padding:18px;font-size:25px}}
+@media(prefers-reduced-motion:reduce){.chat-line,.scroll-chat{transition:none}}
+
+#envelope-scroll{margin:0;width:100%;background:linear-gradient(150deg,#c7b1cc,#e8cbd6 50%,#efc8bc)}
+.envelope-stage{width:100%;height:100svh}
+.envelope{width:100%;max-width:none;height:100svh;transform:none}
+.envelope-paper{border:0;border-radius:0;box-shadow:none;padding:12vh max(6vw,calc((100vw - 1120px)/2));background:linear-gradient(145deg,#f1dde3,#e8cbd6);transform:none!important}
+.envelope-flap{clip-path:polygon(0 0,100% 0,50% 64%);background:linear-gradient(170deg,#f9e9e7,#d5b0c1)}
+.envelope-pocket{clip-path:polygon(0 0,50% 58%,100% 0,100% 100%,0 100%)}
+.wax-seal{width:clamp(80px,10vw,150px);left:50%;top:42%;transform:translateX(-50%);border:4px double #d49aa9;box-shadow:0 10px 24px #66354850,inset 0 0 12px #f8d6df66}
+.envelope-hint{z-index:5;top:auto;bottom:8vh;pointer-events:none;color:#713c55}
+.chat-line{display:flex;gap:16px;align-items:flex-end;width:90%}
+.chat-line.reply{flex-direction:row-reverse}
+.chat-line p{flex:1;font-size:clamp(24px,3vw,42px)}
+.person-avatar{position:relative;display:block;flex:0 0 54px;height:54px;border-radius:50%;background:#f7e9e4;border:1px solid #fff9;overflow:hidden}
+.person-avatar::before{content:"";position:absolute;left:17px;top:10px;width:20px;height:25px;border-radius:45% 45% 40% 40%;background:#d69e8f;z-index:2}
+.person-avatar::after{content:"";position:absolute;left:8px;bottom:-12px;width:40px;height:34px;border-radius:50% 50% 0 0;background:#725563}
+.person-avatar i{position:absolute;left:15px;top:7px;width:24px;height:16px;border-radius:60% 45% 30% 20%;background:#50353e;z-index:3}
+.person-avatar.female{background:#eed3dd}
+.person-avatar.female i{left:12px;top:6px;width:30px;height:36px;border-radius:50% 50% 30% 30%;z-index:1}
+.person-avatar.female::after{background:#ad6687}
+@media(max-width:700px){.envelope-paper{padding:10vh 20px}.chat-line{width:100%;gap:9px}.person-avatar{flex-basis:44px;height:48px}.chat-line p{font-size:24px;padding:18px}.wax-seal{top:45%}}
+
+/* Viewport effects remain transparent to mouse and touch input. */
+.viewport-effects{position:fixed;inset:0;pointer-events:none;z-index:30;overflow:hidden}
+.viewport-effects>div{position:absolute;pointer-events:none}
+.bottom-blur{left:0;right:0;bottom:0;height:clamp(65px,12vh,140px);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);mask-image:linear-gradient(to bottom,transparent,#000 95%);-webkit-mask-image:linear-gradient(to bottom,transparent,#000 95%);background:linear-gradient(to bottom,transparent,#e8cbd622)}
+.edge-blur{-webkit-backdrop-filter:blur(3px);backdrop-filter:url(#directional-edge-filter)}
+.edge-left{left:0;top:0;bottom:0;width:clamp(12px,2.5vw,46px);mask-image:linear-gradient(to right,#000,transparent);-webkit-mask-image:linear-gradient(to right,#000,transparent)}
+.edge-right{right:0;top:0;bottom:0;width:clamp(12px,2.5vw,46px);mask-image:linear-gradient(to left,#000,transparent);-webkit-mask-image:linear-gradient(to left,#000,transparent)}
+.edge-top{top:0;left:0;right:0;height:28px;mask-image:linear-gradient(to bottom,#000,transparent);-webkit-mask-image:linear-gradient(to bottom,#000,transparent)}
+@supports not (backdrop-filter:url(#directional-edge-filter)){.edge-blur{backdrop-filter:blur(3px)}}
+
+.edge-blur{display:none}
+.bottom-blur{height:90px;backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+button:hover,button:active{transform:none}
+footer{position:relative;z-index:31}
+#music-toggle{position:fixed;top:20px;right:24px;z-index:40;border-radius:30px;background:#f7e5ebdd;backdrop-filter:blur(16px);border:1px solid #fff9;color:#713c55;font:12px Arial,sans-serif;padding:10px 17px;min-height:38px}
+header .masthead-note{padding-right:155px}
+@media(max-width:700px){#music-toggle{top:12px;right:12px}header .masthead-note{visibility:hidden}}
+
+#music-controls{position:fixed;top:20px;right:24px;z-index:40;display:flex;align-items:center;gap:10px;padding:5px 14px 5px 5px;border-radius:30px;background:#f7e5ebed;backdrop-filter:blur(16px);border:1px solid #fff9;color:#713c55;box-shadow:0 4px 20px #713c5510}
+#music-controls #music-toggle{position:static;background:transparent;border:0;backdrop-filter:none;padding:9px 12px;white-space:nowrap}
+#music-volume{width:85px;--ui:#713c55;--ui-surface:#f7e5eb;--ui-track:#b16b8e}
+.music-volume-label{font:11px Arial,sans-serif;letter-spacing:0}
+#music-volume-value{min-width:30px;font:11px Arial,sans-serif}
+header .masthead-note{padding-right:340px}
+@media(max-width:700px){#music-controls{top:12px;right:12px;gap:6px;padding-right:10px}#music-volume{width:65px}.music-volume-label{display:none}}
+</style><section id="envelope-scroll" aria-label="Scroll to open a letter"><div class="envelope-stage"><p class="envelope-hint">A little something for you. Scroll to open.</p><div class="envelope"><div class="envelope-paper"><div class="scroll-chat" aria-label="A conversation in Cameo"><div class="chat-line sent"><span class="person-avatar male" role="img" aria-label="Male sender"><i></i></span><p>I wanted to tell you something, but I couldn’t find the right words.</p></div><div class="chat-line reply"><span class="person-avatar female" role="img" aria-label="Female sender"><i></i></span><p>Then why did you write?</p></div><div class="chat-line sent"><span class="person-avatar male" role="img" aria-label="Male sender"><i></i></span><p>Because some feelings are easier to express when you give them a form.</p></div><div class="chat-line reply"><span class="person-avatar female" role="img" aria-label="Female sender"><i></i></span><p>What’s this?</p></div><div class="chat-line sent"><span class="person-avatar male" role="img" aria-label="Male sender"><i></i></span><p>Something I’ve been creating. It’s not perfect, but that’s what makes it beautiful.</p></div><div class="chat-line reply"><span class="person-avatar female" role="img" aria-label="Female sender"><i></i></span><p>It feels different. The curves, the details, there’s something about it.</p></div><div class="chat-line sent"><span class="person-avatar male" role="img" aria-label="Male sender"><i></i></span><p>I call it Cameo.</p></div><div class="chat-line reply"><span class="person-avatar female" role="img" aria-label="Female sender"><i></i></span><p>So, it’s not just a collection of letters?</p></div><div class="chat-line sent"><span class="person-avatar male" role="img" aria-label="Male sender"><i></i></span><p>No. It’s a way of expressing things differently.</p></div><div class="chat-line reply"><span class="person-avatar female" role="img" aria-label="Female sender"><i></i></span><p>Then I think I have a story to write with it.</p></div></div></div><div class="envelope-pocket"></div><div class="envelope-flap"><div class="wax-seal"></div></div></div></div></section><main><div class="botanical" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><header><span class="brand">Cameo</span><div class="masthead-note">An exploration of<br><em>the unfinished beauty.</em></div></header><section><canvas id="art"></canvas><input id="word" type="text" aria-label="Type your specimen" autocomplete="off"></section><div id="bar"></div><footer><div><small id="step"></small><div id="hint"></div></div><div><button id="back">Back</button> <button class="primary" id="next"></button></div></footer></main><div id="more" hidden><div id="study"></div><div id="game"><div class="botanical" aria-hidden="true"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div><h2>Typing test</h2><p>Copy the passage. Your first keystroke starts the 30-second timer.</p><p id="target"></p><textarea id="answer" aria-label="Copy the passage" placeholder="Begin typing here" spellcheck="false" autocapitalize="off"></textarea><p id="score"></p><button id="restart">Restart</button><button id="sound" aria-pressed="true">Sound on</button></div><article id="love-letter"><div class="letter-heading"><span>A letter, in Cameo</span><span>200 words</span></div><h2>For all the little things.</h2><p>My love, I keep finding you in the smallest parts of my day. In the warmth of a cup held between my hands, in the song that follows me home, in the quiet moment before the city wakes, there you are.</p><p>I used to think love arrived with grand declarations. Now I think it lives in the ordinary things we choose to share. A window left open for the evening breeze. The last piece of fruit saved without a word. Your hand reaching for mine when neither of us has anything to say.</p><p>There is so much I still want to discover with you. Streets we have never walked, books we will leave unfinished, mornings when our only plan is to stay a little longer. I want the beautiful days, of course, but I want the uncertain ones too. I want to learn how to meet you gently in each of them.</p><p>If these words could become a place, I would make them a home with sunlight on the floor and room for every version of you. Until then, let this letter hold one simple promise. Wherever life takes us, I will keep choosing the small work of loving you.</p><div class="letter-signature">With all my love.</div></article></div>
+<svg aria-hidden="true" width="0" height="0" style="position:absolute;pointer-events:none"><defs><filter id="directional-edge-filter" x="-50%" y="-50%" width="200%" height="200%" color-interpolation-filters="sRGB"><feGaussianBlur stdDeviation="7 0.7"/></filter></defs></svg><div class="viewport-effects" aria-hidden="true"><div class="edge-blur edge-left"></div><div class="edge-blur edge-right"></div><div class="edge-blur edge-top"></div><div class="bottom-blur"></div></div><div id="music-controls"><button id="music-toggle" aria-pressed="true" aria-label="Mute ambient music">Music on · Mute</button><label class="music-volume-label" for="music-volume">Volume</label><input id="music-volume" type="range" min="0" max="100" value="60" aria-label="Music volume"><output id="music-volume-value" for="music-volume">60%</output></div><script>
 const el=id=>document.getElementById(id), canvas=el('art'),ctx=canvas.getContext('2d'),word=el('word'),bar=el('bar');
 let ink='#a55078',paper='#e8cbd6';
+let falling=[],dragged=null,motionPointer=null,frameDelta=0;
 let stage=0,spacing=0,hover=null,speed=1,blur=0,depth=.14,mode='Wave',time=0,last=0,paused=matchMedia('(prefers-reduced-motion: reduce)').matches,rec=null;
 const chars=()=>Array.from(new Intl.Segmenter(undefined,{granularity:'grapheme'}).segment(word.value),s=>s.segment);
 function control(tag,label){let wrap=document.createElement('label');wrap.append(label+' ');let item=document.createElement(tag);wrap.append(item);bar.append(wrap);return item}
 function range(label,min,max,step,value,change){let i=control('input',label);i.type='range';Object.assign(i,{min,max,step,value});i.oninput=()=>change(+i.value);return i}
 function options(label,list,value,change){let s=control('select',label);list.forEach(([v,t])=>s.add(new Option(t,v)));s.value=value;s.onchange=()=>change(s.value)}
 function button(title,fn){let b=document.createElement('button');b.textContent=title;b.onclick=fn;bar.append(b);return b}
-function ui(){bar.replaceChildren();let a=chars();el('more').hidden=stage!==2;if(stage===2)dotInput.value=word.value;word.hidden=stage!==0;el('step').textContent=['01 / TYPE','02 / SPACE','03 / MOTION'][stage];el('hint').textContent=['Type your own specimen',a.length>1?'Adjust the spacing across your specimen':'One glyph is ready for motion','Hover to lift the letters · Scroll to explore'][stage];el('back').hidden=!stage;el('back').disabled=!!rec;el('next').hidden=stage===2;el('next').disabled=!word.value.trim();el('next').textContent=stage?'Animate →':'Adjust spacing →';
-if(!stage)word.focus();if(stage===1&&a.length>1){let slider=range('Letter spacing',-.12,.65,.005,spacing,v=>{spacing=v;readout.textContent=Math.round(v*1000)+' / 1000 em'});slider.className='wide';let readout=document.createElement('output');readout.textContent=Math.round(spacing*1000)+' / 1000 em';bar.append(readout)}
-if(stage===2){colorControls(bar);range('Speed',.1,3,.1,speed,v=>speed=v);range('Blur',0,12,.5,blur,v=>blur=v);range('Depth',0,.45,.01,depth,v=>depth=v);button(paused?'Play':'Pause',()=>{paused=!paused;ui()});let b=button(rec?'Stop & save':'Record',record);b.disabled=!window.MediaRecorder||!canvas.captureStream;if(b.disabled)b.title='Recording unavailable in this browser'}}
+function ui(){bar.replaceChildren();let a=chars();el('more').hidden=stage!==2;if(stage===2)dotInput.value=word.value;word.hidden=stage!==0;el('step').textContent=['01 / TYPE','02 / SPACE','03 / MOTION'][stage];el('hint').textContent=['Type your own specimen',a.length>1?'Adjust the spacing across your specimen':'One glyph is ready for motion','Drop text, then drag to place · Hover to scatter'][stage];el('back').hidden=!stage;el('back').disabled=!!rec;el('next').hidden=stage===2;el('next').disabled=!word.value.trim();el('next').textContent=stage?'Animate →':'Adjust spacing →';
+if(!stage&&window.scrollY>=document.querySelector('main').offsetTop-100)word.focus();if(stage===1&&a.length>1){let slider=range('Letter spacing',-.12,.65,.005,spacing,v=>{spacing=v;readout.textContent=Math.round(v*1000)+' / 1000 em'});slider.className='wide';let readout=document.createElement('output');readout.textContent=Math.round(spacing*1000)+' / 1000 em';bar.append(readout)}
+if(stage===2){button('Drop text',()=>{falling.push({text:word.value||'Cameo',x:.15+Math.random()*.65,y:-.1,vx:0,vy:.08,pinned:false});if(falling.length>20)falling.shift()});button('Clear drops',()=>falling=[]);colorControls(bar);range('Speed',.1,3,.1,speed,v=>speed=v);range('Blur',0,12,.5,blur,v=>blur=v);range('Depth',0,.45,.01,depth,v=>depth=v);button(paused?'Play':'Pause',()=>{paused=!paused;ui()});let b=button(rec?'Stop & save':'Record',record);b.disabled=!window.MediaRecorder||!canvas.captureStream;if(b.disabled)b.title='Recording unavailable in this browser'}}
 function record(){if(rec){rec.stop();return}let stream=canvas.captureStream(30);try{let r=new MediaRecorder(stream),parts=[];r.ondataavailable=e=>parts.push(e.data);r.onstop=()=>{let url=URL.createObjectURL(new Blob(parts,{type:r.mimeType})),a=document.createElement('a');a.href=url;a.download='cameo.'+(r.mimeType.includes('mp4')?'mp4':'webm');a.click();setTimeout(()=>URL.revokeObjectURL(url),60000);stream.getTracks().forEach(t=>t.stop());rec=null;ui()};r.start();rec=r;paused=false;ui()}catch(e){stream.getTracks().forEach(t=>t.stop());el('hint').textContent='This browser could not start recording.'}}
 word.oninput=()=>{el('next').disabled=!word.value.trim()};el('next').onclick=()=>{stage++;ui()};el('back').onclick=()=>{stage--;ui()};
-function draw(now){let w=canvas.clientWidth,h=canvas.clientHeight,d=devicePixelRatio;if(canvas.width!==Math.round(w*d)||canvas.height!==Math.round(h*d)){canvas.width=Math.round(w*d);canvas.height=Math.round(h*d)}ctx.setTransform(d,0,0,d,0,0);ctx.fillStyle=paper;ctx.fillRect(0,0,w,h);
+function draw(now){let w=canvas.clientWidth,h=canvas.clientHeight,d=devicePixelRatio;frameDelta=Math.min((now-last)/1000,.04);if(canvas.width!==Math.round(w*d)||canvas.height!==Math.round(h*d)){canvas.width=Math.round(w*d);canvas.height=Math.round(h*d)}ctx.setTransform(d,0,0,d,0,0);ctx.fillStyle=paper;ctx.fillRect(0,0,w,h);
 let wash=ctx.createLinearGradient(0,0,w,h);wash.addColorStop(0,'#ac94bf70');wash.addColorStop(.5,'#e9b9d02a');wash.addColorStop(1,'#f5c4ae90');ctx.fillStyle=wash;ctx.fillRect(0,0,w,h);if(!paused&&stage===2)time+=Math.min((now-last)/1000,.1)*speed*3;last=now;
 let a=word.value?chars():Array.from('Type here'),margin=w<500?52:85;ctx.font='100px Cameo';let advances=a.map((c,i)=>ctx.measureText(c).width/100+(i<a.length-1?spacing:0)),units=advances.reduce((s,n)=>s+n,0),size=Math.min(stage===1?335:235,h*(stage===1?.65:.49),(w-2*margin)/Math.max(.6,units)),x=(w-units*size)/2,y=h/2+.3*size;
 if(stage<2){ctx.font=(w<500?'8':'10')+'px monospace';for(let [name,n] of [['ASC',.75],['CAP',.7],['X',.5],['BASE',0],['DESC',-.25]]){let yy=y-n*size;ctx.fillStyle='#965c79';ctx.fillText(name,0,yy+(name==='ASC'?-2:name==='CAP'?8:3));ctx.strokeStyle=n===0?'#b989a0':'#cbaabb';ctx.beginPath();ctx.moveTo(margin*.72,yy);ctx.lineTo(w,yy);ctx.stroke()}}
-ctx.font=size+'px Cameo';a.forEach((c,i)=>{let phase=time-i*.6,k=stage===2?Math.sin(phase)*depth:0;ctx.save();let lift=stage===2&&hover!==null?Math.exp(-(((x+advances[i]*size/2-hover)/(size*.9))**2))*.23:0;ctx.translate(x,y+size*(k-lift));ctx.filter=stage===2?'blur('+blur*Math.abs(Math.sin(phase))+'px)':'none';ctx.fillStyle=!word.value?'#b76c90':ink;ctx.fillText(c,0,0);ctx.restore();x+=advances[i]*size});if(!stage&&document.activeElement===word&&now%1100<600){ctx.fillStyle='#aa537b';ctx.fillRect(word.value?x+2:(w-units*size)/2-4,y-.7*size,2,size*.75)}requestAnimationFrame(draw)}
-canvas.onpointermove=e=>hover=e.clientX-canvas.getBoundingClientRect().left;canvas.onpointerleave=()=>hover=null;
+ctx.font=size+'px Cameo';a.forEach((c,i)=>{let phase=time-i*.6,k=stage===2?Math.sin(phase)*depth:0;ctx.save();let lift=stage===2&&hover!==null?Math.exp(-(((x+advances[i]*size/2-hover)/(size*.9))**2))*.23:0;ctx.translate(x,y+size*(k-lift));ctx.filter=stage===2?'blur('+blur*Math.abs(Math.sin(phase))+'px)':'none';ctx.fillStyle=!word.value?'#b76c90':ink;ctx.fillText(c,0,0);ctx.restore();x+=advances[i]*size});if(!stage&&document.activeElement===word&&now%1100<600){ctx.fillStyle='#aa537b';ctx.fillRect(word.value?x+2:(w-units*size)/2-4,y-.7*size,2,size*.75)}if(stage===2){
+ctx.save();ctx.font=Math.min(64,w*.08)+'px Cameo';ctx.fillStyle=ink;
+for(const item of falling){
+const width=ctx.measureText(item.text).width;
+if(!paused&&!item.pinned&&item!==dragged){
+if(motionPointer){let dx=item.x*w+width/2-motionPointer.x,dy=item.y*h-20-motionPointer.y,dist=Math.hypot(dx,dy);
+if(dist<130){item.vx+=(dx/Math.max(1,dist))*.035;item.vy+=(dy/Math.max(1,dist))*.035}}
+item.vy+=frameDelta*.12;item.x+=item.vx*frameDelta;item.y+=item.vy*frameDelta;item.vx*=.97;
+if(item.y>1.12){item.y=-.12;item.vy=.08}
+item.x=Math.max(0,Math.min(Math.max(0,1-width/w),item.x));
+}
+ctx.save();ctx.globalAlpha=item.pinned?.95:.65;ctx.fillText(item.text,item.x*w,item.y*h);ctx.restore();
+}ctx.restore();
+}requestAnimationFrame(draw)}
+canvas.style.touchAction='none';
+canvas.onpointermove=e=>{
+const r=canvas.getBoundingClientRect();motionPointer={x:e.clientX-r.left,y:e.clientY-r.top};hover=motionPointer.x;
+if(dragged){dragged.x=Math.max(0,Math.min(.9,motionPointer.x/r.width));dragged.y=Math.max(.1,Math.min(.95,motionPointer.y/r.height));}
+};
+canvas.onpointerdown=e=>{
+if(stage!==2)return;
+const r=canvas.getBoundingClientRect(),x=e.clientX-r.left,y=e.clientY-r.top;
+ctx.save();ctx.font=Math.min(64,r.width*.08)+'px Cameo';
+dragged=[...falling].reverse().find(item=>x>=item.x*r.width&&x<=item.x*r.width+ctx.measureText(item.text).width&&Math.abs(y-item.y*r.height)<65)||null;ctx.restore();
+if(dragged){dragged.pinned=true;canvas.setPointerCapture(e.pointerId)}
+};
+canvas.onpointerup=()=>dragged=null;
+canvas.onpointercancel=()=>dragged=null;
+canvas.onpointerleave=()=>{hover=null;motionPointer=null};
+
 function updateControlContrast(){
  const channels=paper.slice(1).match(/../g).map(value=>{
  const channel=parseInt(value,16)/255;
@@ -186,7 +338,7 @@ function updateControlContrast(){
  root.style.setProperty('--ui-track',dark?'#b393a5':'#b16b8e');
 }
 function colorControls(parent){
- for(const [label,value] of [['Type color',ink],['Background',paper]]){
+ for(const [label,value] of [['Type color',ink]]){
  const wrap=document.createElement('label'),input=document.createElement('input');
  wrap.textContent=label;input.type='color';input.value=value;input.setAttribute('aria-label',label);
  input.oninput=()=>{if(label==='Type color')ink=input.value;else paper=input.value;
@@ -277,4 +429,97 @@ function dotFrame(ms){
  requestAnimationFrame(dotFrame)
 }
 document.fonts.ready.then(()=>requestAnimationFrame(dotFrame));
+
+const envelopeScene=document.getElementById('envelope-scroll');
+let envelopeQueued=false;
+function updateEnvelope(){
+ const bounds=envelopeScene.getBoundingClientRect();
+ const total=Math.max(0,Math.min(1,-bounds.top/(bounds.height-innerHeight)));
+ const progress=Math.min(1,total/.16);
+ const chatProgress=Math.max(0,(total-.16)/.84);
+ const lines=Array.from(envelopeScene.querySelectorAll('.chat-line'));
+ const active=Math.min(lines.length-1,Math.floor(chatProgress*lines.length));
+ lines.forEach((line,index)=>{
+ line.classList.toggle('revealed',index<=active);
+ line.setAttribute('aria-hidden',index>active?'true':'false');
+ });
+ const current=lines[active],chat=envelopeScene.querySelector('.scroll-chat');
+ if(current)chat.style.transform='translateY('+(-Math.max(0,current.offsetTop+current.offsetHeight-chat.parentElement.clientHeight*.85))+'px)';
+
+ envelopeScene.style.setProperty('--flap-angle',(-Math.min(1,progress/.35)*180)+'deg');
+ envelopeScene.style.setProperty('--flap-layer',progress>.2?'1':'4');
+ envelopeScene.style.setProperty('--letter-opacity',Math.min(1,progress*5));
+ envelopeScene.style.setProperty('--letter-lift',(-Math.max(0,Math.min(1,(progress-.2)/.65))*24)+'%');
+ envelopeScene.style.setProperty('--pocket-opacity',1-Math.max(0,Math.min(1,(progress-.55)/.3)));
+ envelopeScene.style.setProperty('--hint-opacity',1-Math.min(1,progress*3));
+ envelopeQueued=false;
+}
+addEventListener('scroll',()=>{if(!envelopeQueued){envelopeQueued=true;requestAnimationFrame(updateEnvelope)}},{passive:true});
+addEventListener('resize',updateEnvelope);
+updateEnvelope();
+
+document.querySelectorAll('main section,#love-letter').forEach(panel=>{
+ panel.addEventListener('pointermove',event=>{
+ const rect=panel.getBoundingClientRect();
+ panel.style.setProperty('--pointer-x',((event.clientX-rect.left)/rect.width*100)+'%');
+ panel.style.setProperty('--pointer-y',((event.clientY-rect.top)/rect.height*100)+'%');
+ });
+});
+
+document.addEventListener('keydown',event=>{
+ if(event.key!=='Enter'||event.isComposing||event.repeat)return;
+ const target=event.target;
+ if(target.closest('button,textarea,select')||target.closest('.dot-editor')||target.type==='color'||target.type==='range')return;
+ const mainBounds=document.querySelector('main').getBoundingClientRect();
+ if(stage<2&&word.value.trim()&&mainBounds.top<innerHeight*.5&&mainBounds.bottom>0){
+ event.preventDefault();el('next').click();
+ }
+});
+let musicVolume=.6;
+let musicContext=null,musicGain=null,musicTimer=null,musicEnabled=true,musicStarted=false,chordIndex=0;
+const chords=[[130.81,164.81,196,246.94],[110,130.81,164.81,196],[87.31,130.81,174.61,220],[98,146.83,196,246.94]];
+function scheduleMusic(){
+ if(!musicEnabled||document.hidden)return;
+ const now=musicContext.currentTime;
+ chords[chordIndex++%chords.length].forEach((frequency,index)=>{
+ const oscillator=musicContext.createOscillator(),envelope=musicContext.createGain();
+ oscillator.type='sine';oscillator.frequency.value=frequency;
+ const onset=now+index*.3;
+ envelope.gain.setValueAtTime(0,onset);
+ envelope.gain.linearRampToValueAtTime(.045,onset+2.5);
+ envelope.gain.exponentialRampToValueAtTime(.0001,onset+11);
+ oscillator.connect(envelope).connect(musicGain);oscillator.start(onset);oscillator.stop(onset+12);
+ oscillator.onended=()=>{oscillator.disconnect();envelope.disconnect()};
+ });
+}
+async function startMusic(){
+ if(!musicEnabled)return;
+ const AudioEngine=window.AudioContext||window.webkitAudioContext;
+ if(!AudioEngine)return;
+ try{
+ if(!musicContext){musicContext=new AudioEngine();musicGain=musicContext.createGain();musicGain.gain.value=musicVolume;musicGain.connect(musicContext.destination)}
+ await musicContext.resume();
+ if(!musicStarted){musicStarted=true;scheduleMusic();musicTimer=setInterval(scheduleMusic,8500)}
+ musicGain.gain.setTargetAtTime(musicVolume,musicContext.currentTime,.6);
+ }catch(error){el('music-toggle').textContent='Play music'}
+}
+el('music-toggle').onclick=()=>{
+ musicEnabled=!musicEnabled;
+ el('music-toggle').textContent=musicEnabled?'Music on · Mute':'Music off · Play';
+ el('music-toggle').setAttribute('aria-pressed',String(musicEnabled));
+ el('music-toggle').setAttribute('aria-label',musicEnabled?'Mute ambient music':'Play ambient music');
+ if(musicEnabled)startMusic();else if(musicGain)musicGain.gain.setTargetAtTime(0,musicContext.currentTime,.25);
+};
+el('music-volume').oninput=()=>{
+ musicVolume=Number(el('music-volume').value)/100;
+ el('music-volume-value').textContent=Math.round(musicVolume*100)+'%';
+ if(musicEnabled)startMusic();
+};
+document.addEventListener('pointerdown',event=>{if(event.target.id!=='music-toggle')startMusic()},{once:true});
+document.addEventListener('keydown',()=>startMusic(),{once:true});
+document.addEventListener('visibilitychange',()=>{
+ if(!musicContext)return;
+ if(document.hidden)musicContext.suspend();
+ else if(musicEnabled)musicContext.resume().catch(()=>{});
+});
 </script></html>
