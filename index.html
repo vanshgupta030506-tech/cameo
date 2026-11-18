@@ -100,7 +100,59 @@ footer button{padding:10px 12px}
 #game{padding:60px 20px}
 #target{padding:18px 12px}
 }
-</style><main><header><span class="brand">Cameo</span><small>TYPE STUDIO</small></header><section><canvas id="art"></canvas><input id="word" type="text" aria-label="Type your specimen" autocomplete="off" autofocus></section><div id="bar"></div><footer><div><small id="step"></small><div id="hint"></div></div><div><button id="back">Back</button> <button class="primary" id="next"></button></div></footer></main><div id="more" hidden><div id="study"></div><div id="game"><h2>Typing test</h2><p>Copy the passage. Your first keystroke starts the 30-second timer.</p><p id="target"></p><textarea id="answer" aria-label="Copy the passage" placeholder="Begin typing here" spellcheck="false" autocapitalize="off"></textarea><p id="score"></p><button id="restart">Restart</button><button id="sound" aria-pressed="true">Sound on</button></div></div>
+
+/* Editorial specimen studio */
+main{height:100svh;min-height:720px;padding:26px 4vw 22px;background:linear-gradient(155deg,#bda9c644,transparent 45%,#edbca944)}
+header{border:0;align-items:flex-start;padding:0;position:relative;z-index:1}
+.brand{font-size:clamp(72px,10vw,150px);line-height:.85;letter-spacing:-.045em}
+.masthead-note{font:15px/1.5 Georgia,serif;color:var(--ui);padding-top:8px;text-align:right}
+.masthead-note em{font-weight:normal;color:var(--ink)}
+main section{margin:20px 0 0;min-height:240px;border-top:1px solid color-mix(in srgb,var(--ui-track) 35%,transparent);border-bottom:1px solid color-mix(in srgb,var(--ui-track) 35%,transparent)}
+#bar{max-width:none;border:0;border-radius:0;background:transparent;padding:24px 0 8px;gap:24px;justify-content:flex-start;align-items:center}
+#bar label{display:grid;grid-template-columns:auto auto;align-items:center;gap:10px 16px;font:11px Arial,sans-serif;text-transform:uppercase;letter-spacing:.08em}
+#bar label:has(input[type=range]){grid-template-columns:1fr;gap:5px;flex:1;min-width:85px;max-width:180px}
+#bar input[type=range]{width:100%;height:24px}
+#bar label:has(.wide){max-width:560px;flex:1;font-size:11px}
+#bar input.wide{width:100%}
+#bar button{margin-left:auto}
+#bar button+button{margin-left:0}
+input[type=color]{width:30px;height:30px}
+button,select{border-radius:0;font:12px Arial,sans-serif;letter-spacing:.025em;padding:12px 22px;min-height:44px}
+#bar button{border:1px solid color-mix(in srgb,var(--ui-track) 60%,transparent);background:transparent}
+footer{border:0;margin:0;padding:22px 0 0;min-height:78px}
+#step{font:10px Arial,sans-serif;letter-spacing:.2em}
+#hint{font:17px Georgia,serif;margin-top:8px}
+footer button.primary{border:0;background:var(--ui);padding:14px 28px}
+footer #back{background:transparent;border:0;padding-left:0}
+.dot-editor{top:0;left:0;right:0;padding:24px 4vw;display:flex;gap:24px;align-items:center;background:color-mix(in srgb,var(--paper) 92%,transparent);border-bottom:1px solid color-mix(in srgb,var(--ui-track) 35%,transparent);font:12px Georgia,serif}
+.dot-editor input[type=text]{background:transparent;border:0;border-bottom:1px solid var(--ui-track);border-radius:0;padding:5px 0;font-size:34px;width:clamp(130px,25vw,400px)}
+.dot-editor label{margin-left:auto;font:10px Arial,sans-serif;text-transform:uppercase;letter-spacing:.08em}
+.dot-editor label+label{margin-left:0}
+#game{padding:90px 7vw 110px}
+#game h2{font-size:clamp(65px,9vw,135px);letter-spacing:-.035em;line-height:1;margin-bottom:24px}
+#game>p:not(#target):not(#score){font:17px Georgia,serif;max-width:440px;line-height:1.6;margin-bottom:40px}
+#target{border:0;border-top:1px solid #b57c9870;border-bottom:1px solid #b57c9870;border-radius:0;background-color:transparent;padding:24px 0;line-height:2.2;font-size:clamp(28px,3.2vw,48px);box-shadow:none}
+#game textarea{background:#fff7f332;border:0;border-bottom:1px solid #a97089;border-radius:0;padding:16px 0}
+#game button{background:transparent;border-radius:0}
+#score{padding:8px 0;font-size:12px}
+@media(max-width:700px){
+main{min-height:740px;padding:24px 22px}
+.brand{font-size:78px}
+.masthead-note{font-size:12px}
+main section{margin-top:28px}
+#bar{gap:14px 18px;padding-top:18px}
+#bar label{font-size:9px;gap:8px}
+#bar label:has(input[type=range]){min-width:75px}
+#bar button{padding:9px 15px;min-height:38px}
+footer{padding-top:18px}
+#hint{font-size:15px}
+footer button.primary{padding:12px 16px}
+.dot-editor{padding:18px 22px;gap:12px;font-size:11px;flex-wrap:wrap}
+.dot-editor input[type=text]{width:100%;font-size:28px}
+.dot-editor label{margin-left:0}
+#game{padding:60px 22px}
+}
+</style><main><header><span class="brand">Cameo</span><div class="masthead-note">An exploration of<br><em>the unfinished beauty.</em></div></header><section><canvas id="art"></canvas><input id="word" type="text" aria-label="Type your specimen" autocomplete="off" autofocus></section><div id="bar"></div><footer><div><small id="step"></small><div id="hint"></div></div><div><button id="back">Back</button> <button class="primary" id="next"></button></div></footer></main><div id="more" hidden><div id="study"></div><div id="game"><h2>Typing test</h2><p>Copy the passage. Your first keystroke starts the 30-second timer.</p><p id="target"></p><textarea id="answer" aria-label="Copy the passage" placeholder="Begin typing here" spellcheck="false" autocapitalize="off"></textarea><p id="score"></p><button id="restart">Restart</button><button id="sound" aria-pressed="true">Sound on</button></div></div>
 <script>
 const el=id=>document.getElementById(id), canvas=el('art'),ctx=canvas.getContext('2d'),word=el('word'),bar=el('bar');
 let ink='#a55078',paper='#e8cbd6';
